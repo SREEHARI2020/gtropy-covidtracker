@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+import {useState,useEffect} from 'react';
 import './App.css';
+import axios from 'axios';
+import Tables from './components/Tables';
 
 function App() {
+  const [country,setCountry]=useState([]);
+ const [states,setStates]=useState([]);
+ 
+ 
+  useEffect(() => {
+   
+    const FetchCountry=async()=>{
+
+      const {data}= await axios('https://api.covid19india.org/data.json')
+     setCountry(data);
+     console.log(data.statewise)
+    }
+    FetchCountry();
+
+  }, [])
+  useEffect(() => {
+   
+    const Fetchstates=async()=>{
+
+      const {data}= await axios('https://api.covid19india.org/states_daily.json')
+      setStates(data)
+      console.log(data)
+    }
+    Fetchstates();
+
+  }, [])
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Tables statewise={country.statewise}/>
     </div>
   );
 }
